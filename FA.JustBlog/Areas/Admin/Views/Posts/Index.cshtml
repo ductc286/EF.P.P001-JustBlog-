@@ -1,0 +1,19 @@
+﻿@model IEnumerable<FA.JustBlog.Core.Models.Post>
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@Html.Partial("_ListPost")
+@section Scripts{
+    @*Js to Set changer Published attributes*@
+    <script src="~/Assets/js/setPublished.js"></script>
+}

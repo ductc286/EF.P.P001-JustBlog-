@@ -1,0 +1,106 @@
+﻿@model FA.JustBlog.Core.Models.Post
+@using FA.JustBlog.Framework.Extensions
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+@{
+    ViewBag.Title = "JustBlog - " + Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        form .error {
+            color: #ff0000;
+            font-size: medium;
+        }
+    </style>
+}
+
+<!-- Start div for Post content -->
+<div>
+    <div><h3>@Html.DisplayFor(model => model.Title)</h3></div>
+    <p>
+        <i> Posted  @Html.DisplayRelativeDateTime(Model.PostedOn) Viewed @Model.ViewCount time(s) with Rate @Model.Rate</i>
+        <br /> Category @Html.CategoryLink(Model.Category)
+        <br /><i> @Html.PostTags(Model)</i>
+    </p>
+    <div>
+        @Html.Raw(Model.PostContent) <br />
+    </div>
+</div>
+<!-- End div for Post content -->
+<hr />
+<br />
+
+<!-- Start div for list comments -->
+<div class="container">
+    <h2 class="text-center">List Comment</h2>
+
+    @foreach (var item in Model.Comments)
+    {
+        <!-- Start div for comments item-->
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="~/Assets/img/default-user.png" class="img img-rounded img-fluid" />
+                        <p class="text-secondary text-center">@item.Name</p>
+                    </div>
+                    <div class="col-md-10">
+                        <p style="margin: 0"><strong class="text-info">@item.CommentHeader</strong></p>
+                        <em>@Html.DisplayRelativeDateTime(item.CommentTime)</em>
+                        <div class="clearfix"></div>
+                        <p>@item.CommentText</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End div for comments item-->
+        <br />
+    }
+</div>
+<!-- End div for list comments -->
+<br />
+
+<!-- Start div for form Add comment -->
+<div class="card">
+    <div class="card-header">Leave a Reply</div>
+    <div class="card-body">
+        <form action="#" method="post" novalidate="novalidate" id="form" autocomplete="off">
+            <div class="form-group">
+                <input type="hidden" id="PostId" name="PostId" value=@Model.Id>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="Name" placeholder="Name" name="Name">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="Email" name="Email" aria-describedby="emailHelp" placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="CommentHeader" name="CommentHeader" placeholder="Header">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" id="CommentText" name="CommentText" rows="3" placeholder="Enter your comment here"></textarea>
+            </div>
+            @*@Html.Captcha(3)
+            Not working*@
+            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+        </form>
+    </div>
+</div>
+<br />
+<!-- End div for form Add comment -->
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @*Js to Add comment*@
+    <script src="~/Assets/js/addComment.js"></script>
+
+    @*<script>
+            $("#submit").click(function (event) {
+                event.preventDefault();
+                alert($("form#form").serialize());
+            });
+        </script>*@
+}

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<FA.JustBlog.Core.Models.Tag>
+@using FA.JustBlog.Framework.Extensions
+@using FA.JustBlog.Core.Models;
+
+<div class="w3-card">
+    <div class="w3-container w3-padding">
+        <h3>Popular Tags</h3>
+    </div>
+    <div class="w3-container w3-white w3-padding">
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var keyword in Model)
+            {
+                <span class="w3-tag w3-margin-bottom">@Html.ActionLink(keyword.Name, keyword.UrlSlug, "Tag", null, new { @class = "text-white" })</span>
+            }
+        }
+        else
+        {
+            <span>No tag found!</span>
+        }
+    </div>
+</div>
+
+

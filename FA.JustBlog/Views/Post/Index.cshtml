@@ -1,0 +1,58 @@
+﻿@model IEnumerable<FA.JustBlog.Core.Models.Post>
+@using FA.JustBlog.Core.Models
+@using FA.JustBlog.Framework.Extensions
+@using PagedList.Mvc;
+@using PagedList;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.ActionTitle != null)
+{
+    <h1>All posts in @ViewBag.ActionTitle</h1>
+}
+else
+{
+    <h1>All posts!</h1>
+}
+
+<hr />
+@if (Model.Count() > 0)
+{
+    foreach (var item in Model)
+    {
+        <div class="post-preview">
+            <div>
+
+                @helper PostLink(Post item)
+                {
+                    @*@Html.ActionLink(item.Title, "Details", "Post", new { id = item.Id }, null)*@
+                    @Html.ActionLink(item.Title, "Details", "Post", new { @year = item.PostedOn.Year, month = item.PostedOn.Month.ToString("00"), title = item.UrlSlug }, null)
+                }
+                @{
+                    var year = item.PostedOn.Year;
+                    var month = item.PostedOn.Month.ToString("00");
+                    var title = item.UrlSlug;
+                }
+                @*<h2><a href="/Post/@year/@month/@title">@item.Title</a></h2>*@
+                <h2>@PostLink(item)</h2>
+            </div>
+            <p class="post-meta">
+                Posted @Html.DisplayRelativeDateTime(item.PostedOn) with rate @item.Rate by @item.ViewCount view(s)
+            </p>
+            <div class="post-subtitle">
+                @item.ShortDescription
+            </div>
+
+        </div>
+        <hr>
+    }
+    <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
+    @Html.PagedListPager((IPagedList)ViewBag.OnePageOfData, page => Url.Action(ViewBag.actionName, ViewBag.controllerName, new { page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+}
+else
+{
+    <p>No posts found!</p>
+}
+

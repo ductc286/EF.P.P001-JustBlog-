@@ -1,0 +1,95 @@
+﻿@model IEnumerable<FA.JustBlog.Core.Models.Post>
+@using FA.JustBlog.Framework.Extensions
+
+
+@if (ViewBag.PartialName == null)
+{
+    ViewBag.PartialName = "Data Table";
+}
+@if (ViewBag.Idc == null)
+{
+    ViewBag.Idc = "Data Table";
+}
+<!-- DataTables Example -->
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        @ViewBag.PartialName
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm table-hover table-striped" id="dataTable" cellspacing="0" style=" text-align: center;">
+                <thead class="thead-light">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PostedOn)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Published)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Modified)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ViewCount)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.RateCount)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.TotalRate)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PostedOn)
+                            </td>
+                            <td style="text-align: left;">
+
+                                <div title="@item.Title">
+                                    @ShortStringExtension.ShortString(null, str: item.Title, maxLength: 50)
+                                </div>
+
+
+                            </td>
+                            <td>
+                                @Html.EditorFor(modelItem => item.Published, new { htmlAttributes = new { id = "Published"+@item.Id, onclick = "setPublished(this)" } })
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Modified)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ViewCount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RateCount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalRate)
+                            </td>
+                            <td style="width: 230px">
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, htmlAttributes: new { @class = "btn btn-info" }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.Id }, htmlAttributes: new { @class = "btn btn-info" }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, htmlAttributes: new { @class = "btn btn-info" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer small text-muted">Just updated!</div>
+</div>
+
+
